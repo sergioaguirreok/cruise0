@@ -1,6 +1,7 @@
 import React from "react";
 import { Router, Route, Switch } from "react-router-dom";
 import { Container } from "reactstrap";
+import { Alert } from "reactstrap";
 
 import Loading from "./components/Loading";
 import NavBar from "./components/NavBar";
@@ -20,9 +21,16 @@ initFontAwesome();
 
 const App = () => {
   const { isLoading, error } = useAuth0();
+  const { logout } = useAuth0();
 
   if (error) {
-    return <div>Oops... {error.message}</div>;
+    if (error.message === "Please verify your email before logging in.") {
+      alert("Please verify your email before logging in.", "Cruise0");
+      logout();
+     }
+    else {
+      return <div><Alert color="danger">Error: {error.message}</Alert></div>;
+    }
   }
 
   if (isLoading) {
